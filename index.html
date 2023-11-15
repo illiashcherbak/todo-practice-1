@@ -12,11 +12,11 @@
   <body>
     <div class="wrapper">
       <div class="inner">
-        <form class="form">
-          <h4 class="form__title">Введите задачу</h4>
+        <form class="form" onsubmit="sendTask(event)">
+          <h4 class="form__title">Enter a task</h4>
           <textarea class="form__textarea"></textarea>
-          <button class="form__send-btn" type="submit">Добавить</button>
-          <button class="form__cancel-btn none" type="button">Отмена</button>
+          <button class="form__send-btn" type="submit">Add</button>
+          <button class="form__cancel-btn none" type="button">Cancel</button>
         </form>
         <div class="output"></div>
       </div>
