@@ -4,7 +4,7 @@ import {
   getTasksLocalStorage,
   setTasksLocalStorage,
   generateUniqueId,
-  //initSortableList,
+  initSortableList,
   updateListTasks,
 } from './utils.js';
 
@@ -21,6 +21,9 @@ updateListTasks();
 //! All listeners
 form.addEventListener('submit', sendTask);
 buttonCancel.addEventListener('click', resetSendForm);
+
+output.addEventListener('dragover', initSortableList);
+output.addEventListener('dragenter', (event) => event.preventDefault());
 
 output.addEventListener('click', (event) => {
   const taskElement = event.target.closest('.task__btns');
@@ -132,7 +135,7 @@ function delTask(event) {
 
 function editTask(event) {
   const task = event.target.closest('.task');
-  const text = document.querySelector('.task__text');
+  const text = task.querySelector('.task__text');
   editId = Number(task.dataset.taskId);
 
   textareaForm.value = text.textContent;
@@ -165,5 +168,3 @@ function resetSendForm() {
   buttonSendForm.textContent = 'Add';
   form.reset();
 }
-
-//sendTask(event);

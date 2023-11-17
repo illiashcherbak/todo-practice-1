@@ -2,7 +2,6 @@ import { doneSvg, pinnedSvg, delSvg, editSvg } from './svg.js';
 
 export function getTasksLocalStorage() {
   const tasksJSON = localStorage.getItem('tasks');
-  //  console.log(tasksJSON);
   return tasksJSON ? JSON.parse(tasksJSON) : [];
 }
 
@@ -60,5 +59,54 @@ function renderTasks(tasks) {
       document.querySelector('.output').insertAdjacentHTML('beforeend', item);
     });
 
-  //  activationDrag();
+  activationDrag();
+}
+
+function activationDrag() {
+  const tasks = [...document.querySelectorAll('.task')];
+
+  tasks.forEach((item) => {
+    item.addEventListener('dragstart', () => {
+      setTimeout(() => item.classList.add('dragging'), 0);
+    });
+
+    item.addEventListener('dragend', () => {
+      item.classList.remove('dragging');
+
+      if (tasks.length > 1) {
+        savePositionTask();
+      }
+    });
+  });
+}
+
+function savePositionTask() {
+  const arrayTasksLS = getTasksLocalStorage();
+  const tasks = [...document.querySelectorAll('.task')];
+
+  tasks.forEach((item, i) => {
+    const id = Number(item.dataset.taskId);
+    const index = arrayTasksLS.findIndex((value) => value.id === id);
+
+    if (index !== -1) {
+      arrayTasksLS[index].position = i;
+    }
+  });
+
+  setTasksLocalStorage(arrayTasksLS);
+  updateListTasks();
+}
+
+export function initSortableList(event) {
+  event.preventDefault();
+
+  const output = document.querySelector('.output');
+  const draggingItem = document.querySelector('.dragging');
+  const siblings = [...output.querySelectorAll('.task:not(.dragging)')];
+
+  let nextSibling = siblings.find((sibling) => {
+    return event.clientY <= sibling.offsetTop + sibling.offsetHeight / 2;
+  });
+
+  output.insertBefore(draggingItem, nextSibling);
 }
